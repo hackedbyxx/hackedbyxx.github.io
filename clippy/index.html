@@ -1,0 +1,142 @@
+<html>
+ <head>
+  <link rel="stylesheet" type="text/css" href="clippy.css" media="all" /> 
+  <style>
+  	ul { list-style-type:none; }
+ 
+	#menu ul { position:absolute; float:left; border:1px solid #979797;background:#f1f1f1; padding:2px; box-shadow:2px 2px 2px rgba(0, 0, 0, .6); width:230px; overflow:hidden; }
+	 
+	#menu ul li { float:left; clear:both; height:24px; cursor:pointer; line-height:24px; white-space:nowrap; padding:0 30px; width:100%; display:inline-block;border:1px solid #00000000; }
+	 
+	#menu ul li:hover { background:#E6EDF6; border:1px solid #B4D2F6; }
+	/*#menu ul li:after {content:"√";}*/
+
+	.skin {
+		z-index: 99999;
+		width : 230px;
+		height: 300px;
+		padding : 2px;
+		visibility : hidden;
+		position : absolute;
+	}
+  </style>
+ </head>
+ <body> 
+  <!--自定义右键菜单-->
+	<div id="menu" class="skin">
+		<ul>
+			<li onclick="reload('Bonzi')">Bonzi</li>	
+			<li onclick="reload('Clippy')">Clippy</li>
+			<li onclick="reload('F1')">F1</li>
+			<li onclick="reload('Genie')">Genie</li>
+			<li onclick="reload('Genius')">Genius</li>
+			<li onclick="reload('Links')">Links</li>
+			<li onclick="reload('Merlin')">Merlin</li>
+			<li onclick="reload('Peedy')">Peedy</li>
+			<li onclick="reload('Rocky')">Rocky</li>
+			<li onclick="reload('Rover')">Rover</li>
+	 </ul>
+	</div>
+  <!-- Add these scripts to  the bottom of the page --> 
+  <!-- jQuery 1.7+ --> 
+  <script src="./js/jquery-1.8.3.min.js"></script> 
+  <!-- Clippy.js --> 
+  <script src="./js/clippy.js"></script> 
+  <!-- Init script --> 
+  <script type="text/javascript">
+  	var agent,animations;
+
+  	var actors = ['Bonzi','Clippy','F1','Genie','Genius','Links','Merlin','Peedy','Rocky','Rover'];
+  	var lis = document.querySelector('#menu ul').children;
+  	for(var i=0;i<lis.length;i++){
+  		
+  		var name = lis[i].innerHTML;
+  		
+		console.log(i,name);
+		lis.ap
+  		//lis[i].addEventListener('click', reload(i));
+  		//lis[i].onclick = reload(i);
+  	}
+
+  	load('Clippy');
+
+  	var drawing;
+    var menu = document.getElementById('menu');
+    
+    document.addEventListener('click', hideMenu);
+
+    function load(actor){
+    	clippy.load(actor, function(agent){
+	    	this.agent = agent;
+	        // do anything with the loaded agent
+	        agent.show();
+	        drawing = document.querySelector('.clippy');
+	        //禁用默认右击事件
+	        drawing.oncontextmenu = function(){
+	            return false;
+	        }
+	        //添加右键事件
+	        drawing.addEventListener('contextmenu', showMenu);
+
+	        // 获取所有的动作集合
+			animations = agent.animations();
+
+			var interval = setInterval(function(){
+		    	agent.animate();
+		    },10000)
+	    });
+    }
+
+    function reload(actor){
+		if(agent!=null){
+			agent.hide();
+		}
+		drawing = document.querySelector('.clippy');
+		if(drawing!=null){
+			drawing.remove()
+		}
+		load(actor);
+	}
+
+    function action(act){
+    	agent.play(act);
+    }
+
+    /*显示菜单*/
+    function showMenu() {
+ 
+        var evt = window.event || arguments[0];
+        console.log(evt);
+        var clientWidth = document.body.clientWidth;
+        var clientHeight = document.body.clientHeight;
+
+        if((clientWidth-evt.clientX)<menu.clientWidth){//右侧的情况
+        	menu.style.left = clientWidth-menu.clientWidth-drawing.clientWidth/2 +'px';
+        } else{
+        	menu.style.left = evt.clientX+'px';
+        }
+
+        if((clientHeight-evt.clientY)<menu.clientHeight){
+        	menu.style.top = clientHeight-menu.clientHeight-drawing.clientHeight+'px';
+        } else {
+        	menu.style.top = evt.clientY+'px';
+        }
+         
+
+
+             
+        /*设置菜单可见*/
+        menu.style.visibility = "visible";             
+        
+        
+        
+        
+    }
+    /*隐藏菜单*/
+    function hideMenu() {
+        menu.style.visibility = 'hidden';
+    }                 
+
+</script>
+ </body>
+</html>
