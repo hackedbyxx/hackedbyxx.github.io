@@ -1,0 +1,543 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/null">
+  <link rel="icon" href="/image/findxx4.svg">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="XXBlog">
+  <meta name="author" content="XX">
+  <meta name="keywords" content="">
+  
+  <title>RxJava、Retrofit结合使用进行网络请求 - 寻找XX</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3393780_0yzvgqoahfr.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"findxx.cn","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong><img width="40em" height="40em" src="/image/slogan.svg" srcset="/img/loading.gif" lazyload />&nbsp;&nbsp;寻找XX <strike>周杰伦</strike></strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                歌单
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/image/0d5b857819f4b3bb068b9d7142c830bddca9f8427fd8d98dd8d93ffbf15e6374.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="RxJava、Retrofit结合使用进行网络请求">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-05-11 14:44" pubdate>
+        2022年5月11日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      16
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">RxJava、Retrofit结合使用进行网络请求</h1>
+            
+            <div class="markdown-body">
+              <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>上两篇文章分别提到了retrofit以及RxJava的使用以及好处，这篇文章开始介绍它们的结合使用</p>
+<h3 id="首先引入相关的包"><a href="#首先引入相关的包" class="headerlink" title="首先引入相关的包"></a>首先引入相关的包</h3><pre><code>implementation &#39;io.reactivex.rxjava3:rxandroid:3.0.0&#39; //rxjava
+implementation &#39;com.squareup.retrofit2:retrofit:2.9.0&#39; //retrofit
+implementation &#39;com.squareup.retrofit2:retrofit-converters:2.9.0&#39; //rxjava2对应适配包（二选1）
+implementation &#39;com.squareup.retrofit2:adapter-rxjava3:2.9.0&#39; //rxjava3对应适配包（二选1）
+implementation group: &#39;com.squareup.okhttp3&#39;, name: &#39;okhttp&#39;, version: &#39;4.9.1&#39;
+</code></pre>
+<h3 id="创建retrofit接口"><a href="#创建retrofit接口" class="headerlink" title="创建retrofit接口"></a>创建retrofit接口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> io.reactivex.rxjava3.core.Flowable;<br><span class="hljs-keyword">import</span> io.reactivex.rxjava3.core.Observable;<br><span class="hljs-keyword">import</span> okhttp3.MultipartBody;<br><span class="hljs-keyword">import</span> okhttp3.ResponseBody;<br><span class="hljs-keyword">import</span> retrofit2.Response;<br><span class="hljs-keyword">import</span> retrofit2.http.Body;<br><span class="hljs-keyword">import</span> retrofit2.http.Field;<br><span class="hljs-keyword">import</span> retrofit2.http.FormUrlEncoded;<br><span class="hljs-keyword">import</span> retrofit2.http.GET;<br><span class="hljs-keyword">import</span> retrofit2.http.Header;<br><span class="hljs-keyword">import</span> retrofit2.http.Headers;<br><span class="hljs-keyword">import</span> retrofit2.http.Multipart;<br><span class="hljs-keyword">import</span> retrofit2.http.POST;<br><span class="hljs-keyword">import</span> retrofit2.http.Part;<br><span class="hljs-keyword">import</span> retrofit2.http.Query;<br><span class="hljs-keyword">import</span> retrofit2.http.Url;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">IRetrofitApi</span> &#123;<br>    <span class="hljs-meta">@FormUrlEncoded</span><br>    <span class="hljs-meta">@Headers(&#123;&quot;Domain-Name: api&quot;&#125;)</span><br>    <span class="hljs-meta">@POST(&quot;payment/alipay&quot;)</span><br>    Observable&lt;Response&lt;String&gt;&gt; <span class="hljs-title function_">alipay</span><span class="hljs-params">(<span class="hljs-meta">@Field(&quot;user_id&quot;)</span> String userId, <span class="hljs-meta">@Field(&quot;money&quot;)</span> <span class="hljs-type">int</span> money)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>其中RxJava的Observable替换了retrofit的Call类型，Response<String>泛型String可替换成返回的数据类型，我这里因为要解密返回密文所以使用String接收</String></p>
+<h3 id="创建retrofit接口调用类"><a href="#创建retrofit接口调用类" class="headerlink" title="创建retrofit接口调用类"></a>创建retrofit接口调用类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RetrofitSource</span> &#123;<br>    <span class="hljs-keyword">private</span> IRetrofitApi api;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">RetrofitSource</span> <span class="hljs-variable">retrofitSource</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">synchronized</span> RetrofitSource <span class="hljs-title function_">instance</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">if</span>(retrofitSource == <span class="hljs-literal">null</span>) &#123;<br>            retrofitSource = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RetrofitSource</span>();<br>        &#125;<br>        <span class="hljs-keyword">return</span> retrofitSource;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">RetrofitSource</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">OkHttpClient</span> <span class="hljs-variable">mClient</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OkHttpClient</span>.Builder()<br>                .addInterceptor(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Interceptor</span>() &#123;<br>                    <span class="hljs-meta">@Override</span><br>                    <span class="hljs-keyword">public</span> okhttp3.Response <span class="hljs-title function_">intercept</span><span class="hljs-params">(Chain chain)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>                        <span class="hljs-keyword">try</span> &#123;<br>                            Request.<span class="hljs-type">Builder</span> <span class="hljs-variable">builder</span> <span class="hljs-operator">=</span> chain.request().newBuilder();<br>                            builder.addHeader(<span class="hljs-string">&quot;Accept-Charset&quot;</span>, <span class="hljs-string">&quot;UTF-8&quot;</span>) <span class="hljs-comment">//统一添加请求头</span><br>                                    .addHeader(<span class="hljs-string">&quot;Accept&quot;</span>, <span class="hljs-string">&quot; application/json&quot;</span>);<br><br>                            <span class="hljs-type">Request</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> builder.build();<br>                            <span class="hljs-keyword">return</span> chain.proceed(request);<br>                        &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>                            e.printStackTrace();<br>                        &#125;<br>                        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>                    &#125;<br>                &#125;).build();<br>        <span class="hljs-type">Retrofit</span> <span class="hljs-variable">retrofit</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Retrofit</span>.Builder()<br>                .baseUrl(AppConfig.host + API_VERSION)<br><span class="hljs-comment">//                .addConverterFactory(GsonConverterFactory.create())</span><br>                .addCallAdapterFactory(RxJava3CallAdapterFactory.create()) <span class="hljs-comment">//用于上面提到的的Retrofit</span><br>                .addConverterFactory(StringConverterFactory.create())<br>                .client(mClient)<br>                .build();<br>        api = retrofit.create(IRetrofitApi.class);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="初始化解析"><a href="#初始化解析" class="headerlink" title="初始化解析"></a>初始化解析</h2><h3 id="初始化OkHttpClient"><a href="#初始化OkHttpClient" class="headerlink" title="初始化OkHttpClient"></a>初始化OkHttpClient</h3><p>主要是添加拦截器来修改请求的配置</p>
+<h3 id="初始化retrofit及retrofitApi"><a href="#初始化retrofit及retrofitApi" class="headerlink" title="初始化retrofit及retrofitApi"></a>初始化retrofit及retrofitApi</h3><pre><code>.addCallAdapterFactory(RxJava3CallAdapterFactory.create()) 
+</code></pre>
+<p>用于上面提到的的Retrofit的Call转换成RxJava的Observable。</p>
+<pre><code>.addConverterFactory(StringConverterFactory.create())
+</code></pre>
+<p>用于将请求结果的解析成对应类型数据。</p>
+<p>解析Gson可以使用</p>
+<pre><code>.addConverterFactory(GsonConverterFactory.create())
+</code></pre>
+<p>不要忘记单独添加依赖</p>
+<pre><code>compile &#39;com.squareup.retrofit2:converter-gson:2.9.0&#39;
+</code></pre>
+<h2 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a>请求方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> Observable&lt;Response&lt;String&gt;&gt; <span class="hljs-title function_">alipay</span><span class="hljs-params">(String userId, <span class="hljs-type">int</span> money)</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.api.alipay(userId, money);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>初始化时Retrofit已经用动态代理生成Observable网络请求对象，所以这里调用接口方法能直接进行网络接口请求</p>
+<h1 id="使用RxJava调用接口"><a href="#使用RxJava调用接口" class="headerlink" title="使用RxJava调用接口"></a>使用RxJava调用接口</h1><p>RxJava调用可以简化代码使代码更清晰，以及能切换线程的方法，在android中实现结果返回时操作UI线程。省去了Android handler或者AsyncTask的复杂创建，抽象了HTTP请求接口，使代码结构更清楚</p>
+<h2 id="自定义观察者基类"><a href="#自定义观察者基类" class="headerlink" title="自定义观察者基类"></a>自定义观察者基类</h2><p>创建一个观察者抽象基类实现Observer接口中onSubscribe onNext onComplete方法，泛型是返回的数据类型，新增了自己的两个回调接口方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseObserver</span>&lt;T&gt; <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Observer</span>&lt;Response&lt;String&gt;&gt; &#123;<br><br>    <span class="hljs-keyword">private</span> T result; <span class="hljs-comment">//返回结果</span><br><br>    <span class="hljs-keyword">public</span> T <span class="hljs-title function_">getResult</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setResult</span><span class="hljs-params">(T result)</span> &#123;<br>        <span class="hljs-built_in">this</span>.result = result;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onSubscribe</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> Disposable d)</span> &#123;<br>        <br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onNext</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> Response&lt;String&gt; stringResponse)</span> &#123;<br>        ...<br>        <span class="hljs-comment">//这边进行数据的封装处理</span><br>        <span class="hljs-comment">//成功回调onSuccess(result)接口</span><br>        <span class="hljs-comment">//失败回调onFail(msg)接口</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onComplete</span><span class="hljs-params">()</span> &#123;<br><br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 成功回调</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> result</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onSuccess</span><span class="hljs-params">(T result)</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 错误回调</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> msg</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onFail</span><span class="hljs-params">(String msg)</span>;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="RetrofitSource调用接口并传入Observer对象处理"><a href="#RetrofitSource调用接口并传入Observer对象处理" class="headerlink" title="RetrofitSource调用接口并传入Observer对象处理"></a>RetrofitSource调用接口并传入Observer对象处理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java">RetrofitSource.instance().alipay(uid)<br>                        .subscribeOn(Schedulers.io())<br>                        .observeOn(AndroidSchedulers.mainThread()) <span class="hljs-comment">//切换andoirdUI线程操作</span><br>                        .subscribe(<span class="hljs-keyword">new</span> <span class="hljs-title class_">BaseObserver</span>&lt;BaseResponse&lt;ResultBean&gt;&gt;() &#123;<br>                            <span class="hljs-meta">@Override</span><br>                            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onError</span><span class="hljs-params">(<span class="hljs-meta">@io</span>.reactivex.rxjava3.annotations.NonNull Throwable e)</span> &#123;<br>                                <span class="hljs-comment">//请求失败回调</span><br>                            &#125;<br><br>                            <span class="hljs-meta">@Override</span><br>                            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onSuccess</span><span class="hljs-params">(BaseResponse&lt;ResultBean&gt; result)</span> &#123;<br>                                <span class="hljs-comment">//获取结果并进行UI操作</span><br>                            &#125;<br><br>                            <span class="hljs-meta">@Override</span><br>                            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onFail</span><span class="hljs-params">(String msg)</span> &#123;<br>                                <span class="hljs-comment">//返回结果处理失败回调</span><br>                            &#125;<br>                        &#125;);<br>            &#125;<br></code></pre></td></tr></table></figure>
+<p>到此已经能使用此方法进行网络请求操作了，结构清晰，代码简洁。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于网络访问的抽象与优化，实际上是个非常难的课题，在Retrofit之前，大家努力的方向基本上都是Volley/OkHttp这种围绕底层网络访问的工作。<br>因为越底层的东西越容易抽象，越上升到接近业务层，就越容易在纷扰的业务层中迷失。<br>Retrofit能精准地抓到Call网络工作对象这个关键点，并能通过一系列精巧的设计实现对这种类型“飘忽不定”的对象的自动化定制生产，着实令人赞叹。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/RxAndroid/">RxAndroid</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8E%9F%E5%88%9B/">原创</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Android/">Android</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/13/HtmlGenerator/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">HtmlGenerator-HTML表格等生成器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/11/RxJava/">
+                        <span class="hidden-mobile">RxJava的使用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/@waline/client@1.2.2/dist/Waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://comment.findxx.cn/","placeholder":"说点什么","path":"window.location.pathname","avatar":"wavatar","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":true,"avatarCDN":"https://sdn.geekzu.org/avatar/","avatarForce":false,"requiredFields":[],"emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tieba","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/weibo","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"emojiCDN":null,"emojiMaps":null,"anonymous":null},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        new Waline(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
