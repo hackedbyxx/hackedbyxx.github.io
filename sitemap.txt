@@ -1,3 +1,4 @@
+https://findxx.cn/2022/07/05/websocket-client-with-okhttp/
 https://findxx.cn/2022/05/26/EasyMessageQueue/
 https://findxx.cn/404.html
 https://findxx.cn/2022/05/13/HtmlGenerator/
@@ -32,8 +33,12 @@ https://findxx.cn/tags/java/
 https://findxx.cn/tags/Queue/
 https://findxx.cn/tags/MessageQueue/
 https://findxx.cn/tags/ConcurrentHashMap/
+https://findxx.cn/tags/OKHttp/
+https://findxx.cn/tags/WebSocket/
+https://findxx.cn/tags/WebSocket-Client/
 https://findxx.cn/categories/Java/
 https://findxx.cn/categories/Java/RxJava/
 https://findxx.cn/categories/Java/Spring/
 https://findxx.cn/categories/Java/retrofit/
 https://findxx.cn/categories/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/
+https://findxx.cn/categories/Java/Net/

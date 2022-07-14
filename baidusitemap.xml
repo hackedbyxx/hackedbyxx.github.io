@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://findxx.cn/2022/07/05/websocket-client-with-okhttp/</loc>
+    <lastmod>2022-07-14</lastmod>
+  </url>
+  <url>
     <loc>https://findxx.cn/2022/05/26/EasyMessageQueue/</loc>
     <lastmod>2022-05-26</lastmod>
   </url>
