@@ -1,3 +1,4 @@
+https://findxx.cn/2022/10/17/HtmlGenerator2/
 https://findxx.cn/2022/07/05/websocket-client-with-okhttp/
 https://findxx.cn/2022/05/26/EasyMessageQueue/
 https://findxx.cn/404.html
