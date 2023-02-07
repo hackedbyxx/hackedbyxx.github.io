@@ -1,3 +1,4 @@
+https://findxx.cn/2023/02/07/pitch-analys/
 https://findxx.cn/2022/10/17/HtmlGenerator2/
 https://findxx.cn/2022/07/05/websocket-client-with-okhttp/
 https://findxx.cn/2022/05/26/EasyMessageQueue/
@@ -37,9 +38,15 @@ https://findxx.cn/tags/ConcurrentHashMap/
 https://findxx.cn/tags/OKHttp/
 https://findxx.cn/tags/WebSocket/
 https://findxx.cn/tags/WebSocket-Client/
+https://findxx.cn/tags/Pitch/
+https://findxx.cn/tags/Plotly/
+https://findxx.cn/tags/parsermouth/
+https://findxx.cn/tags/tensorflow/
 https://findxx.cn/categories/Java/
 https://findxx.cn/categories/Java/RxJava/
 https://findxx.cn/categories/Java/Spring/
 https://findxx.cn/categories/Java/retrofit/
 https://findxx.cn/categories/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/
 https://findxx.cn/categories/Java/Net/
+https://findxx.cn/categories/Python/
+https://findxx.cn/categories/Python/Flask/

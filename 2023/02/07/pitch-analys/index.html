@@ -1,0 +1,521 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/null">
+  <link rel="icon" href="/image/findxx4.svg">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="XXBlog">
+  <meta name="author" content="XX">
+  <meta name="keywords" content="">
+  
+  <title>基于Python的音高分析器 - 寻找XX</title>
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3393780_0yzvgqoahfr.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"findxx.cn","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong><img width="40em" height="40em" src="/image/slogan.svg" srcset="/img/loading.gif" lazyload />&nbsp;&nbsp;寻找XX <strike>周杰伦</strike></strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                歌单
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/image/0d5b857819f4b3bb068b9d7142c830bddca9f8427fd8d98dd8d93ffbf15e6374.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="基于Python的音高分析器">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2023-02-07 11:35" pubdate>
+        2023年2月7日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      653 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      8
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">基于Python的音高分析器</h1>
+            
+            <div class="markdown-body">
+              <h3 id="前提背景"><a href="#前提背景" class="headerlink" title="前提背景"></a>前提背景</h3><p>之前在B站看到一个分析歌手在各大晚会的歌唱表演是否为假唱，通过分析声音的频率还有连续稳定性来判断，觉得很有意思来研究一下。</p>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>首先找到了tensorflow的Spice声音分析模型，查看了下<a target="_blank" rel="noopener" href="https://tensorflow.google.cn/hub/tutorials/spice?hl=zh-cn">官方文档</a>照着示例用了一下，步骤比较繁琐且不易懂，其使用的plotly python生成数据图性能较差生成较慢。</p>
+<p>于是找到了另一个开源库 <a target="_blank" rel="noopener" href="https://parselmouth.readthedocs.io/en/stable/">Parselmouth</a>，<br>Parselmouth是Praat软件的 Python 库，Parselmouth 直接访问 Praat 的 C/C++ 代码（这意味着算法及其输出与 Praat 中的完全相同）并提供对程序数据的高效访问，但也提供了一个看起来与任何其他 Python 库没有区别的界面，<br>使用起来效率更高且相对简单易懂。</p>
+<h3 id="基础数据处理"><a href="#基础数据处理" class="headerlink" title="基础数据处理"></a>基础数据处理</h3><p>获取频率</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">sound = parselmouth.Sound(tmp_name)<br><span class="hljs-comment"># 获取频率数组</span><br>pitch_track = sound.to_pitch().selected_array[<span class="hljs-string">&#x27;frequency&#x27;</span>]<br></code></pre></td></tr></table></figure>
+<p>计算音高，首先了解了下音高的定义及对应频率算法，参考<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/0fc2163cfc50">音高、音名与对应频率</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python">pitches = <span class="hljs-built_in">list</span>(pitch_track)<br>A4 = <span class="hljs-number">440</span> <span class="hljs-comment">#以A4为基准频率</span><br>C0 = A4 * <span class="hljs-built_in">pow</span>(<span class="hljs-number">2</span>, -<span class="hljs-number">4.75</span>) <span class="hljs-comment">#计算最低C0音高后面作为对比</span><br>note_names = [<span class="hljs-string">&quot;C&quot;</span>, <span class="hljs-string">&quot;C#&quot;</span>, <span class="hljs-string">&quot;D&quot;</span>, <span class="hljs-string">&quot;D#&quot;</span>, <span class="hljs-string">&quot;E&quot;</span>, <span class="hljs-string">&quot;F&quot;</span>, <span class="hljs-string">&quot;F#&quot;</span>, <span class="hljs-string">&quot;G&quot;</span>, <span class="hljs-string">&quot;G#&quot;</span>, <span class="hljs-string">&quot;A&quot;</span>, <span class="hljs-string">&quot;A#&quot;</span>, <span class="hljs-string">&quot;B&quot;</span>]<br>notes = []<br>times = []<br><span class="hljs-keyword">for</span> i, freq <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(pitches):<br>    times.append(i / <span class="hljs-number">100</span>)<br>    <span class="hljs-comment"># if freq &lt; 329:</span><br>    <span class="hljs-comment">#     notes.append(None)</span><br>    <span class="hljs-comment">#     continue</span><br>    <span class="hljs-keyword">if</span> freq == <span class="hljs-number">0.0</span>:<br>        notes.append(<span class="hljs-literal">None</span>)<br>        <span class="hljs-keyword">continue</span><br>    h = <span class="hljs-built_in">round</span>(<span class="hljs-number">12</span> * math.log2(freq / C0))<br>    octave = h // <span class="hljs-number">12</span><br>    n = h % <span class="hljs-number">12</span><br>    minute = <span class="hljs-built_in">int</span>(i / <span class="hljs-number">60</span> / <span class="hljs-number">100</span>)<br>    second = <span class="hljs-built_in">round</span>(i / <span class="hljs-number">100</span> % <span class="hljs-number">60</span>, <span class="hljs-number">1</span>)<br>    note = note_names[n] + <span class="hljs-built_in">str</span>(octave) + <span class="hljs-string">&#x27;-&#x27;</span> + <span class="hljs-built_in">str</span>(minute) + <span class="hljs-string">&#x27;m&#x27;</span> + <span class="hljs-built_in">str</span>(second) + <span class="hljs-string">&#x27;s&#x27;</span><br>    notes.append(note)<br></code></pre></td></tr></table></figure>
+<p>获取到对应时间点的频率及计算出来的音高，数据处理完毕</p>
+<h3 id="前端展示"><a href="#前端展示" class="headerlink" title="前端展示"></a>前端展示</h3><p>相对复杂一些</p>
+<p>使用plotly js进行数据展示，性能较好且考虑到跨平台使用了Flask开放对应接口使用<br>音频图展示比较容易但是动画相对复杂一些，plotly自带的动画插入帧可以实现基本的波形动画，但是无法获取每一帧的事件，没有办法进行回调处理。<br>于是曲线救国使用setInterval定时绘制标头及计算滚动rangeslider</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//计算range范围</span><br><span class="hljs-keyword">var</span> xrange = <span class="hljs-number">20</span>; <span class="hljs-comment">//当前屏展示的时间范围</span><br><span class="hljs-keyword">var</span> startX = x/<span class="hljs-number">100</span>;<br>startX = startX&gt;xrange/<span class="hljs-number">5</span>*<span class="hljs-number">2</span>?startX-xrange/<span class="hljs-number">5</span>*<span class="hljs-number">2</span>:<span class="hljs-number">0</span>;<br><span class="hljs-title class_">Plotly</span>.<span class="hljs-title function_">update</span>(<span class="hljs-string">&quot;plot&quot;</span>, &#123;&#125;, &#123;<span class="hljs-attr">xaxis</span>:&#123;<span class="hljs-attr">range</span>:[startX, startX+xrange]&#125;&#125;);<br></code></pre></td></tr></table></figure>
+<p>setInterval会有一些延迟，目前还没有找到好的解决方案</p>
+<h3 id="使用地址及效果展示"><a href="#使用地址及效果展示" class="headerlink" title="使用地址及效果展示"></a>使用地址及效果展示</h3><p><strong><a target="_blank" rel="noopener" href="https://taotail.pythonanywhere.com/">https://taotail.pythonanywhere.com/</a></strong><br><img src="/2023/02/07/pitch-analys/%E8%83%8C%E5%8F%9B.png" srcset="/img/loading.gif" lazyload alt="图片"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/categories/Python/Flask/">Flask</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Pitch/">Pitch</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Plotly/">Plotly</a>
+                    
+                      <a class="hover-with-bg" href="/tags/parsermouth/">parsermouth</a>
+                    
+                      <a class="hover-with-bg" href="/tags/tensorflow/">tensorflow</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/10/17/HtmlGenerator2/">
+                        <span class="hidden-mobile">HtmlGenerator（2）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createScript('https://fastly.jsdelivr.net/npm/@waline/client@1.2.2/dist/Waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://comment.findxx.cn/","placeholder":"说点什么","path":"window.location.pathname","avatar":"wavatar","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":true,"avatarCDN":"https://sdn.geekzu.org/avatar/","avatarForce":false,"requiredFields":[],"emoji":["https://fastly.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://fastly.jsdelivr.net/gh/walinejs/emojis@1.0.0/tieba","https://fastly.jsdelivr.net/gh/walinejs/emojis@1.0.0/weibo","https://fastly.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"emojiCDN":null,"emojiMaps":null,"anonymous":null},
+          {
+            el: '#waline',
+            path: window.location.pathname
+          }
+        )
+        new Waline(options);
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://fastly.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://fastly.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://fastly.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://fastly.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://fastly.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://fastly.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
